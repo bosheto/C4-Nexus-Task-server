@@ -21,6 +21,7 @@ app.use(express.json())
 app.get('/api/products', async (req, res) => {
    try {
         const products = await Product.find()
+        res.set('Access-Control-Allow-Origin', '*');
         res.json(products)
    } catch (err) { 
         res.status(500).json({message: err.message})
@@ -28,10 +29,12 @@ app.get('/api/products', async (req, res) => {
 })
 
 app.get('api/products/:id', getProductMiddleware, async(req, res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
     res.json(res.product)
 })
 
 app.post('/api/products', async(req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     const product = new Product({
         name: req.body.name,
         img: req.body.img,
@@ -59,6 +62,7 @@ app.post('/api/products', async(req, res) => {
 app.delete('/api/products/:id', getProductMiddleware, async(req,res) => {
     try {
         await res.product.deleteOne()
+        res.set('Access-Control-Allow-Origin', '*');
         res.json({message: 'Deleted product'})
     } catch (err) {
         res.status(500).json({message: err.message})
